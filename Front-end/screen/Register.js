@@ -10,10 +10,11 @@ const Register = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
   const [address, setAddress] = useState('');
+  const [role, setRole] = useState('user'); // Thêm state cho trường role
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.1.12:4000/register/create', {
+      const response = await axios.post('http://192.168.1.14:4000/register/create', {
         username,
         email,
         password,
@@ -21,6 +22,7 @@ const Register = () => {
         phoneNumber,
         dateOfBirth,
         address,
+        role, // Thêm giá trị của trường role vào request
       });
       console.log('Registration successful:', response.data);
       // Xử lý sau khi đăng ký thành công (nếu cần)
@@ -75,6 +77,12 @@ const Register = () => {
         placeholder="Địa chỉ"
         value={address}
         onChangeText={setAddress}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Vai trò (user hoặc admin)"
+        value={role}
+        onChangeText={setRole}
       />
       <Button title="Đăng ký" onPress={handleSubmit} />
     </View>

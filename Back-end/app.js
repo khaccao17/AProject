@@ -10,6 +10,7 @@ var employeeRouter = require('./routes/Employee');
 var leaverequestRouter = require('./routes/leaverequest');
 var salarydeductionRouter = require('./routes/salarydeduction');
 var registerRouter = require('./routes/register');
+const loginRouter = require('./routes/login');
 var app = express();
 
 
@@ -47,6 +48,7 @@ app.use('/salarydeduction',salarydeductionRouter)
 app.use('/employee', employeeRouter)
 app.use('/leaverequest', leaverequestRouter)
 app.use('/register', registerRouter)
+app.use('/login', loginRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

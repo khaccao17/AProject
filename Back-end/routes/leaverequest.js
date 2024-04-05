@@ -2,18 +2,25 @@ const express = require('express');
 const router = express.Router();
 const LeaveRequestModel = require('../models/LeaveRequestModel');
 
-// Create a new leave request
+// Route để tạo leave request
 router.post('/create', async (req, res) => {
-    const leaveRequest = new LeaveRequestModel({
-        startDate: req.body.startDate,
-        endDate: req.body.endDate,
-        reason: req.body.reason,
-    });
+    const { employeeId, startDate, endDate, reason } = req.body;
+    
     try {
-        const newLeaveRequest = await leaveRequest.save();
-        res.status(201).json(newLeaveRequest);
+        // Tạo leave request mới
+        const newLeaveRequest = new LeaveRequestModel({
+            employeeId,
+            startDate,
+            endDate,
+            reason
+        });
+
+        const savedLeaveRequest = await newLeaveRequest.save();
+
+        res.status(201).json({ message: 'Leave request created successfully', leaveRequest: savedLeaveRequest });
     } catch (err) {
-        res.status(400).json({ message: err.message });
+        console.error('Error creating leave request:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 });
 
@@ -36,6 +43,21 @@ router.get('/employee/:employeeId', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
+// Get leave requests by specific date
+router.get('/date/:date', async (req, res) => {
+    const { date } = req.params;
+
+    try {
+        const leaveRequests = await LeaveRequestModel.find({ startDate: { $lte: date }, endDate: { $gte: date } });
+        // Trả về các leave request có ngày bắt đầu nhỏ hơn hoặc bằng date và ngày kết thúc lớn hơn hoặc bằng date
+        res.json(leaveRequests);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
+
+// Update leave request status
 router.put('/:id/status', async (req, res) => {
     const { id } = req.params;
     const { status } = req.body;
@@ -52,4 +74,5 @@ router.put('/:id/status', async (req, res) => {
         res.status(500).json({ message: err.message });
     }
 });
+
 module.exports = router;

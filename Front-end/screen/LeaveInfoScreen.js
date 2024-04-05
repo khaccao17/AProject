@@ -7,7 +7,7 @@ const LeaveInfoScreen = ({ navigation }) => {
 
   const fetchLeaveRequests = async () => {
     try {
-      const response = await axios.get('http://192.168.1.12:4000/leaverequest');
+      const response = await axios.get('http://192.168.1.14:4000/leaverequest');
       setLeaveRequests(response.data);
     } catch (error) {
       console.error('Error fetching leave requests: ', error);

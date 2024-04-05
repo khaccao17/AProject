@@ -15,7 +15,7 @@ const CreateEmployee = () => {
         return;
       }
 
-      const response = await fetch('http://192.168.1.12:4000/employee/create', {
+      const response = await fetch('http://192.168.1.14:4000/employee/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

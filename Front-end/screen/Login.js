@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
   const [username, setUsername] = useState('');
@@ -9,11 +10,16 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     try {
       // Thực hiện yêu cầu API đến máy chủ backend để xác thực người dùng
-      const response = await axios.post('http://192.168.1.12:4000/register/login', { username, password });
+      const response = await axios.post('http://192.168.1.14:4000/register/login', { username, password });
       
       // Kiểm tra dữ liệu phản hồi từ backend
       if (response.data.message === 'Login successful') {
-        // Nếu đăng nhập thành công, hiển thị thông báo và chuyển hướng sang trang App.js
+        // Nếu đăng nhập thành công, lưu token vào AsyncStorage
+        const token = response.data.token;
+        if (token) {
+          await AsyncStorage.setItem('token', token);
+        }
+        // Hiển thị thông báo và chuyển hướng sang trang App.js
         Alert.alert('Login Successful', 'Welcome!');
         navigation.navigate('App');
       } else {
@@ -25,7 +31,7 @@ const LoginScreen = ({ navigation }) => {
       console.error('Login error:', error);
       Alert.alert('Error', 'An error occurred while logging in');
     }
-  };
+  };  
 
   return (
     <View style={styles.container}>

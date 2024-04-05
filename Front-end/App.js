@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TouchableOpacity, Text, FlatList, Image } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, FlatList, Image, Text } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Navbar from './screen/Navbar';
 import HeaderComponent from './screen/HeaderComponet';
 import FooterComponent from './screen/FooterComponent';
@@ -12,6 +13,8 @@ import Xinnghi from './screen/Xinnghi';
 import Register from './screen/Register';
 import LoginScreen from './screen/Login';
 import Editleave from './screen/Editleave';
+import CalendarScreen from './screen/Calender';
+
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -27,6 +30,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="App" component={MainApp} />
         <Stack.Screen name="Editleave" component={Editleave}/>
+        <Stack.Screen name="Calender" component={CalendarScreen}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -35,11 +39,12 @@ export default function App() {
 function MainApp() {
   const navigation = useNavigation();
   const [controls, setControls] = useState([]);
+  const [username, setUsername] = useState(null);
 
   useEffect(() => {
     const fetchControls = async () => {
       try {
-        const response = await fetch('http://192.168.1.27:3001/control');
+        const response = await fetch('http://192.168.1.14:3001/control');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -52,6 +57,26 @@ function MainApp() {
     };
 
     fetchControls();
+
+    // Lấy tên người dùng từ AsyncStorage
+    const getUsername = async () => {
+      const token = await AsyncStorage.getItem('token');
+      if (token) {
+        // Gửi yêu cầu API để lấy thông tin người dùng
+        try {
+          const response = await axios.get('http://192.168.1.14:4000/user/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUsername(response.data.username);
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+        }
+      }
+    };
+
+    getUsername();
   }, []);
 
   return (
@@ -61,23 +86,23 @@ function MainApp() {
         <Text style={styles.serviceText}>Tạo Dịch Vụ</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('LeaveInfo')}>
-      <Text style={styles.serviceText}>Leave Info</Text>
+        <Text style={styles.serviceText}>Leave Info</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Xinnghi')}>
-      <Text style={styles.serviceText}>Xin Nghỉ</Text>
+        <Text style={styles.serviceText}>Xin Nghỉ</Text>
       </TouchableOpacity>
+      {username && <Text style={styles.serviceText}>Xin chào, {username}</Text>}
       <HeaderComponent />
       <FlatList
         data={controls}
         keyExtractor={item => item._id.toString()}
         renderItem={({ item }) => (
           <View style={styles.listItem}>
-          <Text style={styles.itemTitle}>{item.name}</Text>
-          <Text style={styles.itemText}>Price: {item.price}</Text>
-          <Text style={styles.itemText}>Description: {item.description}</Text>
-          <Image source={{ uri: item.image }} style={styles.itemImage} />
-        </View>
-        
+            <Text style={styles.itemTitle}>{item.name}</Text>
+            <Text style={styles.itemText}>Price: {item.price}</Text>
+            <Text style={styles.itemText}>Description: {item.description}</Text>
+            <Image source={{ uri: item.image }} style={styles.itemImage} />
+          </View>
         )}
       />
       <FooterComponent />
@@ -109,5 +134,9 @@ const styles = StyleSheet.create({
   },
   itemText: {
     color: 'black', // Đổi màu chữ thành màu đen
+  },
+  itemImage: {
+    width: 100,
+    height: 100,
   },
 });

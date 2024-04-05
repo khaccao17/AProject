@@ -20,6 +20,9 @@ const FooterComponent = () => {
   const handleLoginPress = () => {
     navigation.navigate('Login');
   };
+  const handleHeartPress = () => {
+    navigation.navigate('Calender');
+  };
 
   return (
     <View style={styles.footer}>
@@ -29,7 +32,7 @@ const FooterComponent = () => {
       <TouchableOpacity style={styles.iconContainer} onPress={handleSearchPress}>
         <Ionicons name="search-outline" size={24} color="white" />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.iconContainer}>
+      <TouchableOpacity style={styles.iconContainer} onPress={handleHeartPress}>
         <Ionicons name="heart-outline" size={24} color="white" />
       </TouchableOpacity>
       <TouchableOpacity style={styles.iconContainer} onPress={handleLoginPress}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput,ScrollView } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
 
@@ -32,7 +32,7 @@ const Xinnghi = ({ navigation }) => {
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post('http://192.168.1.12:4000/leaverequest/create', {
+      const response = await axios.post('http://192.168.1.14:4000/leaverequest/create', {
         startDate,
         endDate,
         reason,
@@ -46,6 +46,7 @@ const Xinnghi = ({ navigation }) => {
   };
 
   return (
+    <ScrollView>
     <View style={styles.container}>
       <Text style={styles.title}>Xin nghỉ</Text>
       <View style={styles.inputContainer}>
@@ -86,6 +87,7 @@ const Xinnghi = ({ navigation }) => {
       </View>
       <Button title="Gửi yêu cầu" onPress={handleSubmit} />
     </View>
+    </ScrollView>
   );
 };
 

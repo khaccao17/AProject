@@ -9,7 +9,7 @@ const Editleave = ({ route, navigation }) => {
   const handleSave = async () => {
     try {
       // Gửi yêu cầu cập nhật trạng thái mới lên server
-      await axios.put(`http://192.168.1.12:4000/leaverequest/${itemId}/status`, {
+      await axios.put(`http://192.168.1.14:4000/leaverequest/${itemId}/status`, {
         status: newStatus,
       });
       // Load lại trang LeaveInfo sau khi cập nhật thành công

@@ -35,7 +35,8 @@ const RegisterSchema = new Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    role: { type: String, enum: ['user', 'admin'], default: 'user' } // Thêm trường role
 });
 
 const RegisterModel = mongoose.model('register', RegisterSchema,'register');

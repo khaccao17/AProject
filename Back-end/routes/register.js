@@ -4,10 +4,10 @@ const bcrypt = require('bcryptjs');
 const express = require('express');
 const router = express.Router();
 const RegisterModel = require('../models/RegisterModel');
-
+const jwt = require('jsonwebtoken');
 // Route để tạo người dùng mới
 router.post('/create', async (req, res) => {
-    const { username, email, password, fullName, phoneNumber, dateOfBirth, address } = req.body;
+    const { username, email, password, fullName, phoneNumber, dateOfBirth, address,role } = req.body;
     
     try {
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
@@ -21,11 +21,16 @@ router.post('/create', async (req, res) => {
             fullName,
             phoneNumber,
             dateOfBirth,
-            address
+            address,
+            role
         });
 
         const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
+
+        // Tạo mã token
+        const token = jwt.sign({ userId: savedUser._id }, 'khaccao17', { expiresIn: '1h' }); // Thay 'your_secret_key_here' bằng một chuỗi bí mật thực tế
+
+        res.status(201).json({ user: savedUser, token }); // Trả về mã token trong phản hồi
     } catch (err) {
         // Kiểm tra loại lỗi và trả về thông báo phù hợp
         if (err.name === 'ValidationError') {
