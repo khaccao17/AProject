@@ -3,55 +3,48 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'reac
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const LoginScreen = ({ navigation }) => {
+const Dangnhap = ({ navigation }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
     try {
       const response = await axios.post('http://192.168.1.14:4000/register/login', { username, password });
-      
       if (response.data.message === 'Login successful') {
-        // Lưu token vào AsyncStorage
+        // Lưu token vào AsyncStorage để giữ phiên đăng nhập
         await AsyncStorage.setItem('token', response.data.token);
-
-        // Kiểm tra vai trò của người dùng từ token
-        const decodedToken = jwt_decode(response.data.token);
-        if (decodedToken.role === 'admin') {
-          // Nếu là admin, chuyển hướng đến màn hình Xinnghi
-          navigation.navigate('Xinnghi');
-        } else {
-          // Nếu không phải admin, có thể chuyển hướng đến màn hình khác hoặc thực hiện hành động khác
-          Alert.alert('Login Successful', 'Welcome!');
-          navigation.navigate('App');
-        }
+        // Chuyển hướng đến trang App sau khi đăng nhập thành công
+        navigation.replace('App');
       } else {
-        Alert.alert('Login Failed', response.data.message);
+        // Hiển thị thông báo lỗi nếu đăng nhập không thành công
+        Alert.alert('Đăng nhập thất bại', 'Tên người dùng hoặc mật khẩu không đúng.');
       }
     } catch (error) {
-      console.error('Login error:', error);
-      Alert.alert('Error', 'An error occurred while logging in');
+      console.error('Error logging in:', error);
+      // Hiển thị thông báo lỗi nếu có lỗi xảy ra khi đăng nhập
+      Alert.alert('Đã xảy ra lỗi', 'Vui lòng thử lại sau.');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
+      <Text style={styles.title}>Đăng Nhập</Text>
       <TextInput
         style={styles.input}
-        placeholder="Username"
+        placeholder="Tên người dùng"
         value={username}
         onChangeText={setUsername}
+        autoCapitalize="none"
       />
       <TextInput
         style={styles.input}
-        placeholder="Password"
-        secureTextEntry={true}
+        placeholder="Mật khẩu"
         value={password}
         onChangeText={setPassword}
+        secureTextEntry
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+        <Text style={styles.buttonText}>Đăng Nhập</Text>
       </TouchableOpacity>
     </View>
   );
@@ -85,6 +78,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     justifyContent: 'center',
     alignItems: 'center',
+    marginTop: 20,
   },
   buttonText: {
     color: 'white',
@@ -92,4 +86,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginScreen;
+export default Dangnhap;

@@ -16,7 +16,7 @@ import Editleave from './screen/Editleave';
 import CalendarScreen from './screen/Calender';
 import Xinnghi1 from './screen/Xinnghi1';
 import Lich from './screen/Lich';
-
+import Dangnhap from './screen/Dangnhap';
 const Stack = createStackNavigator();
 
 export default function App() {
@@ -35,6 +35,7 @@ export default function App() {
         <Stack.Screen name="Calender" component={CalendarScreen}/>
         <Stack.Screen name="Xinnghi1" component={Xinnghi1}/>
         <Stack.Screen name="Lich" component={Lich}/>
+        <Stack.Screen name="Dangnhap" component={Dangnhap} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -62,26 +63,26 @@ function MainApp() {
 
     fetchControls();
 
-    // Lấy tên người dùng từ AsyncStorage
-    const getUsername = async () => {
-      const token = await AsyncStorage.getItem('token');
-      if (token) {
-        // Gửi yêu cầu API để lấy thông tin người dùng
-        try {
-          const response = await axios.get('http://192.168.1.14:4000/user/profile', {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUsername(response.data.username);
-        } catch (error) {
-          console.error('Error fetching user profile:', error);
-        }
-      }
-    };
-
-    getUsername();
+    getUsername(); // Gọi hàm getUsername ở đây để cập nhật username khi đăng nhập thành công
   }, []);
+
+  // Lấy tên người dùng từ AsyncStorage
+  const getUsername = async () => {
+    const token = await AsyncStorage.getItem('token');
+    if (token) {
+      // Gửi yêu cầu API để lấy thông tin người dùng
+      try {
+        const response = await axios.get('http://192.168.1.14:4000/user/profile', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsername(response.data.username);
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
+      }
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -91,6 +92,9 @@ function MainApp() {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('LeaveInfo')}>
         <Text style={styles.serviceText}>Leave Info</Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('Dangnhap')}>
+        <Text style={styles.serviceText}>Đăng nhập</Text>
       </TouchableOpacity>
       {username && <Text style={styles.serviceText}>Xin chào, {username}</Text>}
       <HeaderComponent />
