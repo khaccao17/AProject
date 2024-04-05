@@ -10,7 +10,9 @@ const RegisterSchema = new Schema({
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true,
+        trim: true
     },
     password: {
         type: String,
@@ -36,9 +38,13 @@ const RegisterSchema = new Schema({
         type: Date,
         default: Date.now
     },
-    role: { type: String, enum: ['user', 'admin'], default: 'user' } // Thêm trường role
+    role: {
+        type: String,
+        enum: ['user', 'admin'],
+        default: 'user'
+    }
 });
 
-const RegisterModel = mongoose.model('register', RegisterSchema,'register');
+const RegisterModel = mongoose.model('register', RegisterSchema);
 
 module.exports = RegisterModel;

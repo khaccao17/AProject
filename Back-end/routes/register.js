@@ -1,13 +1,12 @@
 const bcrypt = require('bcryptjs');
-
-// routes/registerRoutes.js
 const express = require('express');
 const router = express.Router();
 const RegisterModel = require('../models/RegisterModel');
 const jwt = require('jsonwebtoken');
+
 // Route để tạo người dùng mới
 router.post('/create', async (req, res) => {
-    const { username, email, password, fullName, phoneNumber, dateOfBirth, address,role } = req.body;
+    const { username, email, password, fullName, phoneNumber, dateOfBirth, address, role } = req.body;
     
     try {
         // Mã hóa mật khẩu trước khi lưu vào cơ sở dữ liệu
@@ -40,6 +39,7 @@ router.post('/create', async (req, res) => {
         }
     }
 });
+
 // Route để xác thực thông tin đăng nhập
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
@@ -60,8 +60,5 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
-
-
-// Các phần còn lại của mã không cần thay đổi
 
 module.exports = router;

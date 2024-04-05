@@ -14,6 +14,8 @@ import Register from './screen/Register';
 import LoginScreen from './screen/Login';
 import Editleave from './screen/Editleave';
 import CalendarScreen from './screen/Calender';
+import Xinnghi1 from './screen/Xinnghi1';
+import Lich from './screen/Lich';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +33,8 @@ export default function App() {
         <Stack.Screen name="App" component={MainApp} />
         <Stack.Screen name="Editleave" component={Editleave}/>
         <Stack.Screen name="Calender" component={CalendarScreen}/>
+        <Stack.Screen name="Xinnghi1" component={Xinnghi1}/>
+        <Stack.Screen name="Lich" component={Lich}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -87,9 +91,6 @@ function MainApp() {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('LeaveInfo')}>
         <Text style={styles.serviceText}>Leave Info</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Xinnghi')}>
-        <Text style={styles.serviceText}>Xin Nghỉ</Text>
       </TouchableOpacity>
       {username && <Text style={styles.serviceText}>Xin chào, {username}</Text>}
       <HeaderComponent />

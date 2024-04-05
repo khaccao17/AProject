@@ -32,7 +32,6 @@ const LoginScreen = ({ navigation }) => {
       Alert.alert('Error', 'An error occurred while logging in');
     }
   };  
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>

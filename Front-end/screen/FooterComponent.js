@@ -21,7 +21,7 @@ const FooterComponent = () => {
     navigation.navigate('Login');
   };
   const handleHeartPress = () => {
-    navigation.navigate('Calender');
+    navigation.navigate('Lich');
   };
 
   return (

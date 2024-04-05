@@ -3,6 +3,7 @@ class LoginModel {
         this.email = email;
         this.password = password;
     }
+
     getEmail() {
         return this.email;
     }
@@ -18,18 +19,18 @@ class LoginModel {
     setPassword(password) {
         this.password = password;
     }
+
     isValid() {
         if (!this.email || !this.password) {
             return false;
         }
-        if (!this.validateEmail(this.email)) {
-            return false;
-        }
         return true;
     }
+
     validateEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
 }
+
 module.exports = LoginModel;

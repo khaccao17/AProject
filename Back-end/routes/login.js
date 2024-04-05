@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const LoginModel = require('../models/LoginModel');
+const bcrypt = require('bcryptjs'); // Thêm bcrypt vào để sử dụng hàm compare
+
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -9,7 +11,7 @@ router.post('/login', async (req, res) => {
         const user = await LoginModel.findOne({ username });
 
         // Kiểm tra nếu người dùng không tồn tại hoặc mật khẩu không khớp
-        if (!user || !(await bcrypt.compare(password, user.password))) {
+        if (!user || !(await bcrypt.compare(password, user.getPassword()))) {
             return res.status(401).json({ message: 'Invalid username or password' });
         }
 
